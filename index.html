@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Code Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f4f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    h1 { font-size: 18px; margin-bottom: 10px; }
+    input {
+      font-size: 24px;
+      text-align: center;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      margin-bottom: 10px;
+    }
+    button {
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 4px;
+      cursor: pointer;
+    }
+    .gen { background: #007aff; color: white; }
+    .copy { background: #eee; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Willekeurige Code Generator</h1>
+    <input id="code" readonly value="Klik op 'Genereer code'">
+    <div>
+      <button class="gen" id="genBtn" onclick="generateCode()">Genereer code</button>
+      <button class="copy" id="copyBtn" onclick="copyCode()">Kopieer</button>
+    </div>
+  </div>
+
+  <script>
+    function randomLetter() {
+      const letters = "abcdefghijklmnopqrstuvwxyz";
+      return letters[Math.floor(Math.random() * letters.length)];
+    }
+
+    function generateCode() {
+      let chars = [];
+      for (let i = 0; i < 18; i++) chars.push(randomLetter());
+
+      // vervang 1 letter met cijfer
+      const numIndex = Math.floor(Math.random() * 18);
+      chars[numIndex] = String(Math.floor(Math.random() * 10));
+
+      // maak 1 andere letter hoofdletter
+      let upperIndex;
+      do { upperIndex = Math.floor(Math.random() * 18); }
+      while (upperIndex === numIndex);
+      chars[upperIndex] = chars[upperIndex].toUpperCase();
+
+      // format xx-xx-xx
+      const code = chars.slice(0,6).join('') + '-' +
+                   chars.slice(6,12).join('') + '-' +
+                   chars.slice(12,18).join('');
+
+      document.getElementById("code").value = code;
+    }
+
+    function copyCode() {
+      const field = document.getElementById("code");
+      field.select();
+      field.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Code gekopieerd!");
+    }
+  </script>
+</body>
+</html>
